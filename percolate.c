@@ -38,6 +38,7 @@ void *print_counter(void* s){
     clock_t diff = (clock() - before) * 1000;
     while(diff < trigger){
       diff = (clock() - before) * 1000;
+      /*
       if(diff % 5 == 0){
         if(counter_p1 < threshold){
           pthread_mutex_lock(&counter_p1_mutex);
@@ -55,6 +56,7 @@ void *print_counter(void* s){
           pthread_mutex_unlock(&counter_p3_mutex);
         }
       }
+      */
     }
     pthread_mutex_lock(&counter_p1_mutex);
     pthread_mutex_lock(&counter_p2_mutex);
