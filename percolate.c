@@ -1,15 +1,66 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <pthread.h>
+#include <time.h>
 
 #include "arralloc.h"
 #include "uni.h"
 #include "percolate.h"
 
-int main(int argc, char* argv[])
+int** map;
+int loop, nchange, old;
+long int counter_p1, counter_p2, counter_p3;
+int argc;
+char** argv;
+
+void update(int i, int j) {
+  old = map[i][j];
+  if (map[i-1][j] > map[i][j]) map[i][j] = map[i-1][j];
+  if (map[i+1][j] > map[i][j]) map[i][j] = map[i+1][j];
+  if (map[i][j-1] > map[i][j]) map[i][j] = map[i][j-1];
+  if (map[i][j+1] > map[i][j]) map[i][j] = map[i][j+1];
+  if (map[i][j] != old)
+    {
+      nchange++;
+    }
+}
+
+int msec = 10, trigger = 10, round = 20;
+
+void print_counter(){
+  clock_t before = clock();
+  FILE* handle;
+  handle = fopen("Counter_p.txt","w+");
+  int r = 0;
+  while(r < round){
+    clock_t diff = clock() - before;
+    while(diff < trigger){
+      diff = clock() - before;
+    }
+    fprintf(handle, "Counter1:%8ld, Counter2:%8ld, Counter3:%8ld\n", counter_p1, counter_p2, counter_p3);
+    ++r;
+  }
+  fclose(handle);
+}
+
+int main_step();
+
+int main(int argc_m, char* argv_m[])
+{
+  argc = argc_m;
+  argv = argv_m;
+  pthread_t *tid = malloc(2 * sizeof(pthread_t));
+  pthread_create(&tid[0], NULL, main_step, NULL);
+  pthread_create(&tid[1], NULL, print_counter, NULL);
+  pthread_join(&tid[0], NULL);
+  pthread_join(&tid[1], NULL);
+  return 0;
+}
+
+int main_step()
 {
   int length;
-  int** map;
   float rho;
   int seed;
   int maxClusters;
@@ -22,6 +73,7 @@ int main(int argc, char* argv[])
   datFile = "map.dat";
   pgmFile = "map.pgm";
   maxClusters = length * length;
+  counter_p1 = counter_p2 = counter_p3 = 0;
 
   int opt;
   int exit_code = -1;
@@ -139,7 +191,6 @@ int main(int argc, char* argv[])
 	}
     }
 
-  int loop, nchange, old;
   loop = 1;
   nchange = 1;
   while (nchange > 0)
@@ -151,15 +202,7 @@ int main(int argc, char* argv[])
 	    {
 	      if (map[i][j] != 0)
 		{
-		  old = map[i][j];
-		  if (map[i-1][j] > map[i][j]) map[i][j] = map[i-1][j];
-		  if (map[i+1][j] > map[i][j]) map[i][j] = map[i+1][j];
-		  if (map[i][j-1] > map[i][j]) map[i][j] = map[i][j-1];
-		  if (map[i][j+1] > map[i][j]) map[i][j] = map[i][j+1];
-		  if (map[i][j] != old)
-		    {
-		      nchange++;
-		    }
+      update(i, j);
 		}
 	    }
 	}
