@@ -11,6 +11,7 @@
 int** map;
 int loop, nchange, old;
 long int counter_p1, counter_p2, counter_p3;
+pthread_mutex_t counter_p1_mutex, counter_p2_mutex, counter_p3_mutex;
 int argc;
 char** argv;
 
@@ -28,7 +29,7 @@ void update(int i, int j) {
 
 
 void *print_counter(void* s){
-int msec = 10, trigger = 10, round = 20;
+  int msec = 10, trigger = 10, round = 20, threshold = 10;
   clock_t before = clock();
   FILE* handle;
   handle = fopen("Counter_p.txt","w+");
@@ -37,9 +38,33 @@ int msec = 10, trigger = 10, round = 20;
     clock_t diff = clock() - before;
     while(diff < trigger){
       diff = clock() - before;
+      if(diff % 5 == 0){
+        if(counter_p1 < threshold){
+          pthread_mutex_lock(&counter_p1_mutex);
+          counter_p1 /= 2;
+          pthread_mutex_unlock(&counter_p1_mutex);
+        }
+        if(counter_p2 < threshold){
+          pthread_mutex_lock(&counter_p2_mutex);
+          counter_p2 /= 2;
+          pthread_mutex_unlock(&counter_p2_mutex);
+        }
+        if(counter_p3 < threshold){
+          pthread_mutex_lock(&counter_p3_mutex);
+          counter_p3 /= 2;
+          pthread_mutex_unlock(&counter_p3_mutex);
+        }
+      }
     }
+    pthread_mutex_lock(&counter_p1_mutex);
+    pthread_mutex_lock(&counter_p2_mutex);
+    pthread_mutex_lock(&counter_p3_mutex);
     fprintf(handle, "Counter1:%8ld, Counter2:%8ld, Counter3:%8ld\n", counter_p1, counter_p2, counter_p3);
+    pthread_mutex_unlock(&counter_p1_mutex);
+    pthread_mutex_unlock(&counter_p2_mutex);
+    pthread_mutex_unlock(&counter_p3_mutex);
     ++r;
+    before = clock();
   }
   fclose(handle);
 }
@@ -183,6 +208,9 @@ void *main_step(void * s)
     {
       for (j=1; j<=length; j++)
 	{
+    pthread_mutex_lock(&counter_p1_mutex);
+    counter_p1++;
+    pthread_mutex_unlock(&counter_p1_mutex);
 	  if (map[i][j] != 0)
 	    {
 	      nfill++;
@@ -203,6 +231,9 @@ void *main_step(void * s)
 	      if (map[i][j] != 0)
 		{
       update(i, j);
+      pthread_mutex_lock(&counter_p2_mutex);
+      counter_p2++;
+      pthread_mutex_unlock(&counter_p2_mutex);
 		}
 	    }
 	}
@@ -219,6 +250,9 @@ void *main_step(void * s)
 	{
 	  for (ibot=1; ibot<=length; ibot++)
 	    {
+        pthread_mutex_lock(&counter_p3_mutex);
+        counter_p3++;
+        pthread_mutex_unlock(&counter_p3_mutex);
 	      if (map[1][itop] == map[length][ibot])
 		{
 		  percs = 1;
