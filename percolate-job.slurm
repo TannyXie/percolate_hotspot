@@ -11,7 +11,7 @@
 # account on Cirrus within SAFE.
 # Replace [student] below with your unique student budget code
 # (e.g. s1234567).
-#SBATCH --account=[project]-[student]
+#SBATCH --account=dc134-s2186835
 # We use the "standard" partition as we are running on CPU nodes
 #SBATCH --partition=standard
 # We use the "standard" QoS as our runtime is less than 4 days
