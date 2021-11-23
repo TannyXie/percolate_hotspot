@@ -59,7 +59,8 @@ void *print_counter(void* s){
     pthread_mutex_lock(&counter_p1_mutex);
     pthread_mutex_lock(&counter_p2_mutex);
     pthread_mutex_lock(&counter_p3_mutex);
-    fprintf(handle, "Counter1:%8ld, Counter2:%8ld, Counter3:%8ld\n", counter_p1, counter_p2, counter_p3);
+    if(!(counter_p1 == 0 && counter_p2 == 0 && counter_p3 == 0))
+      fprintf(handle, "Counter1:%8ld, Counter2:%8ld, Counter3:%8ld\n", counter_p1, counter_p2, counter_p3);
     pthread_mutex_unlock(&counter_p1_mutex);
     pthread_mutex_unlock(&counter_p2_mutex);
     pthread_mutex_unlock(&counter_p3_mutex);
@@ -71,6 +72,14 @@ void *print_counter(void* s){
 
 void *main_step(void*);
 
+int waitfor(int seconds){
+  clock_t before = clock();
+  clock_t diff = (clock() - before) * 1000 / CLOCKS_PER_SEC;
+  while(diff < seconds)
+    diff = (clock() - before) * 1000 / CLOCKS_PER_SEC;
+  return 0;
+}
+
 int main(int argc_m, char* argv_m[])
 {
   argc = argc_m;
@@ -79,6 +88,7 @@ int main(int argc_m, char* argv_m[])
   pthread_create(&timer_pid, NULL, main_step, NULL);
   pthread_create(&mainstep_pid, NULL, print_counter, NULL);
   pthread_join(timer_pid, NULL);
+  waitfor(1);
   pthread_join(mainstep_pid, NULL);
   return 0;
 }
