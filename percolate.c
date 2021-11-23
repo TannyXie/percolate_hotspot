@@ -29,15 +29,15 @@ void update(int i, int j) {
 
 
 void *print_counter(void* s){
-  int msec = 10, trigger = 10, round = 20, threshold = 10;
+  int msec = 10, trigger = 1000, round = 1000, threshold = 20000;
   clock_t before = clock();
   FILE* handle;
   handle = fopen("Counter_p.txt","w+");
   int r = 0;
   while(r < round){
-    clock_t diff = clock() - before;
+    clock_t diff = (clock() - before) * 1000;
     while(diff < trigger){
-      diff = clock() - before;
+      diff = (clock() - before) * 1000;
       if(diff % 5 == 0){
         if(counter_p1 < threshold){
           pthread_mutex_lock(&counter_p1_mutex);
