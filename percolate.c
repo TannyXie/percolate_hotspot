@@ -44,7 +44,7 @@ void print_counter(){
   fclose(handle);
 }
 
-int main_step();
+void main_step();
 
 int main(int argc_m, char* argv_m[])
 {
@@ -58,7 +58,7 @@ int main(int argc_m, char* argv_m[])
   return 0;
 }
 
-int main_step()
+void main_step()
 {
   int length;
   float rho;
