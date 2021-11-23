@@ -53,8 +53,8 @@ int main(int argc_m, char* argv_m[])
   pthread_t timer_pid, mainstep_pid;
   pthread_create(&timer_pid, NULL, main_step, NULL);
   pthread_create(&mainstep_pid, NULL, print_counter, NULL);
-  pthread_join(&timer_pid, NULL);
-  pthread_join(&mainstep_pid, NULL);
+  pthread_join(timer_pid, NULL);
+  pthread_join(mainstep_pid, NULL);
   return 0;
 }
 
