@@ -87,9 +87,9 @@ int main(int argc_m, char* argv_m[])
   argc = argc_m;
   argv = argv_m;
   pthread_t timer_pid, mainstep_pid;
-  pthread_create(&timer_pid, NULL, main_step, NULL);
+  //pthread_create(&timer_pid, NULL, main_step, NULL);
   pthread_create(&mainstep_pid, NULL, print_counter, NULL);
-  pthread_join(timer_pid, NULL);
+  //pthread_join(timer_pid, NULL);
   waitfor(1);
   pthread_join(mainstep_pid, NULL);
   return 0;
@@ -97,6 +97,7 @@ int main(int argc_m, char* argv_m[])
 
 void *main_step(void * s)
 {
+  clock_t before = clock();
   int length;
   float rho;
   int seed;
@@ -384,6 +385,10 @@ void *main_step(void * s)
   free(rank);
 
   free(map);
+  clock_t diff = (clock() - before) * 1000 / CLOCKS_PER_SEC;
+  FILE* handle = fopen("Counter_p.txt","w+");
+  fprintf(handle, "diff:%d", (int)diff);
+  fclose(handle);
 }
 
 static int clustcompare(const void *p1, const void *p2)
