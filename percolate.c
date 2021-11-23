@@ -386,7 +386,7 @@ int main(int argc, char* argv[])
   free(rank);
 
   free(map);
-  clock_t diff = (clock() - before) * 1000 / CLOCKS_PER_SEC;
+  clock_t diff = (clock() - before) * 1000;
   FILE* handle = fopen("Counter_p.txt","w+");
   fprintf(handle, "diff:%d\n", (int)diff);
   fprintf(handle, "end\n");
