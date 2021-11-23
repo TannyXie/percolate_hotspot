@@ -29,7 +29,7 @@ void update(int i, int j) {
 
 
 void *print_counter(void* s){
-  int msec = 10, trigger = 1000, round = 1000, threshold = 20000;
+  int msec = 10, trigger = 100, round = 100, threshold = 20000;
   clock_t before = clock();
   FILE* handle;
   handle = fopen("Counter_p.txt","w+");
