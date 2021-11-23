@@ -12,8 +12,8 @@ int** map;
 int loop, nchange, old;
 long int counter_p1, counter_p2, counter_p3;
 pthread_mutex_t counter_p1_mutex, counter_p2_mutex, counter_p3_mutex;
-int argc;
-char** argv;
+//int argc;
+//char** argv;
 
 void update(int i, int j) {
   old = map[i][j];
@@ -81,7 +81,7 @@ int waitfor(int seconds){
     diff = (clock() - before) * 1000 / CLOCKS_PER_SEC;
   return 0;
 }
-
+/*
 int main(int argc_m, char* argv_m[])
 {
   argc = argc_m;
@@ -94,8 +94,9 @@ int main(int argc_m, char* argv_m[])
   pthread_join(mainstep_pid, NULL);
   return 0;
 }
-
-void *main_step(void * s)
+*/
+//void *main_step(void * s)
+int main(int argc, char* argv[])
 {
   clock_t before = clock();
   int length;
