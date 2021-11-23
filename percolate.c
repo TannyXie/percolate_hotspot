@@ -28,7 +28,7 @@ void update(int i, int j) {
 
 int msec = 10, trigger = 10, round = 20;
 
-void print_counter(void* s){
+void *print_counter(void* s){
   clock_t before = clock();
   FILE* handle;
   handle = fopen("Counter_p.txt","w+");
@@ -44,7 +44,7 @@ void print_counter(void* s){
   fclose(handle);
 }
 
-void main_step(void*);
+void *main_step(void*);
 
 int main(int argc_m, char* argv_m[])
 {
@@ -58,7 +58,7 @@ int main(int argc_m, char* argv_m[])
   return 0;
 }
 
-void main_step(void * s)
+void *main_step(void * s)
 {
   int length;
   float rho;
