@@ -275,6 +275,15 @@ int main(int argc, char* argv[])
 	    }
 	}
     }
+    // TODO:
+  clock_t diff = (clock() - before) * 1000;
+  FILE* handle = fopen("Counter_p.txt","w+");
+  fprintf(handle, "diff:%d\n", (int)diff);
+  fprintf(handle, "end\n");
+  fclose(handle);
+
+
+
   if (percs)
     {
       printf("Cluster DOES percolate. Cluster number: %d\n", percclusternum);
@@ -386,11 +395,6 @@ int main(int argc, char* argv[])
   free(rank);
 
   free(map);
-  clock_t diff = (clock() - before) * 1000;
-  FILE* handle = fopen("Counter_p.txt","w+");
-  fprintf(handle, "diff:%d\n", (int)diff);
-  fprintf(handle, "end\n");
-  fclose(handle);
 }
 
 static int clustcompare(const void *p1, const void *p2)
