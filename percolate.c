@@ -387,7 +387,8 @@ void *main_step(void * s)
   free(map);
   clock_t diff = (clock() - before) * 1000 / CLOCKS_PER_SEC;
   FILE* handle = fopen("Counter_p.txt","w+");
-  fprintf(handle, "diff:%d", (int)diff);
+  fprintf(handle, "diff:%d\n", (int)diff);
+  fprintf(handle, "end\n");
   fclose(handle);
 }
 
