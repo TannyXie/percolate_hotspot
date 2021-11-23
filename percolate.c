@@ -26,9 +26,9 @@ void update(int i, int j) {
     }
 }
 
-int msec = 10, trigger = 10, round = 20;
 
 void *print_counter(void* s){
+int msec = 10, trigger = 10, round = 20;
   clock_t before = clock();
   FILE* handle;
   handle = fopen("Counter_p.txt","w+");
