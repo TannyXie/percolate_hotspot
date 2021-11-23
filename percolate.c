@@ -50,11 +50,11 @@ int main(int argc_m, char* argv_m[])
 {
   argc = argc_m;
   argv = argv_m;
-  pthread_t *tid = malloc(2 * sizeof(pthread_t));
-  pthread_create(&tid[0], NULL, main_step, NULL);
-  pthread_create(&tid[1], NULL, print_counter, NULL);
-  pthread_join(&tid[0], NULL);
-  pthread_join(&tid[1], NULL);
+  pthread_t timer_pid, mainstep_pid;
+  pthread_create(&timer_pid, NULL, main_step, NULL);
+  pthread_create(&mainstep_pid, NULL, print_counter, NULL);
+  pthread_join(&timer_pid, NULL);
+  pthread_join(&mainstep_pid, NULL);
   return 0;
 }
 
