@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <time.h>
+#include <sched.h>
+
 
 #include "arralloc.h"
 #include "uni.h"
@@ -12,8 +14,8 @@ int** map;
 int loop, nchange, old;
 long int counter_p1, counter_p2, counter_p3;
 pthread_mutex_t counter_p1_mutex, counter_p2_mutex, counter_p3_mutex;
-//int argc;
-//char** argv;
+int argc;
+char** argv;
 
 void update(int i, int j) {
   old = map[i][j];
@@ -29,6 +31,13 @@ void update(int i, int j) {
 
 
 void *print_counter(void* s){
+  struct sched_param sp;
+  bzero((void*)&sp, sizeof(sp));
+  int policy = SCHED_RR;
+  const int priority = (sched_get_priority_max(policy) + sched_get_priority_min(policy)) / 2;
+
+  sp.sched_priority = priority;
+  
   int msec = 10, trigger = 5, round = 1000, threshold = 20000;
   clock_t before = clock();
   FILE* handle;
@@ -81,7 +90,7 @@ int waitfor(int seconds){
     diff = (clock() - before) * 1000 / CLOCKS_PER_SEC;
   return 0;
 }
-/*
+
 int main(int argc_m, char* argv_m[])
 {
   argc = argc_m;
@@ -94,10 +103,17 @@ int main(int argc_m, char* argv_m[])
   pthread_join(mainstep_pid, NULL);
   return 0;
 }
-*/
-//void *main_step(void * s)
-int main(int argc, char* argv[])
+
+void *main_step(void * s)
+//int main(int argc, char* argv[])
 {
+  struct sched_param sp;
+  bzero((void*)&sp, sizeof(sp));
+  int policy = SCHED_RR;
+  const int priority = (sched_get_priority_max(policy) + sched_get_priority_min(policy)) / 2;
+
+  sp.sched_priority = priority;
+
   clock_t before = clock();
   int length;
   float rho;
