@@ -39,7 +39,7 @@ void *print_counter(void* s){
 
   sp.sched_priority = priority;
 
-  int msec = 10, trigger = 5, round = 1000, threshold = 20000;
+  int msec = 10, trigger = 10, round = 1000, threshold = 20000;
   clock_t before = clock();
   FILE* handle;
   handle = fopen("Counter_p.txt","w+");
