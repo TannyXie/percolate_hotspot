@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <time.h>
 #include <sched.h>
+#include <strings.h>
 
 
 #include "arralloc.h"
@@ -37,7 +38,7 @@ void *print_counter(void* s){
   const int priority = (sched_get_priority_max(policy) + sched_get_priority_min(policy)) / 2;
 
   sp.sched_priority = priority;
-  
+
   int msec = 10, trigger = 5, round = 1000, threshold = 20000;
   clock_t before = clock();
   FILE* handle;
