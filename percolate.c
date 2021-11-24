@@ -5,6 +5,7 @@
 #include <time.h>
 #include <sched.h>
 #include <strings.h>
+#include <unistd.h>
 
 
 #include "arralloc.h"
@@ -91,7 +92,7 @@ int waitfor(int seconds){
     diff = (clock() - before) * 1000 / CLOCKS_PER_SEC;
   return 0;
 }
-
+/*
 int main(int argc_m, char* argv_m[])
 {
   argc = argc_m;
@@ -102,6 +103,26 @@ int main(int argc_m, char* argv_m[])
   pthread_join(timer_pid, NULL);
   waitfor(1);
   pthread_join(mainstep_pid, NULL);
+  return 0;
+}
+*/
+
+int main(int argc_m, char * argv_m[]) {
+  argc = argc_m;
+  argv = argv_m;
+
+  pid_t fpid;
+  fpid = fork();
+  if (fpid < 0) {
+    printf("Fork error");
+  }
+  else if (fpid == 0) {
+    //child process
+    print_counter(NULL);
+  }
+  else {
+    main_step(NULL);
+  }
   return 0;
 }
 
