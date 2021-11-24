@@ -293,11 +293,13 @@ void *main_step(void * s)
 	}
     }
     // TODO:
+    /*
   clock_t diff = (clock() - before) * 1000;
   FILE* handle = fopen("Counter_p.txt","w+");
   fprintf(handle, "diff:%d\n", (int)diff);
   fprintf(handle, "end\n");
   fclose(handle);
+  */
 
 
 
